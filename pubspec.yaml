@@ -60,6 +60,7 @@ flutter:
   assets:
     - assets/icons/home_question.svg
     - assets/icons/home_settings.svg
+    - assets/images/medicine_red.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

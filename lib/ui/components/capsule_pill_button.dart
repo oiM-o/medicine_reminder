@@ -13,9 +13,9 @@ class CapsulePillButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final height = size.height * 0.08;                // 呼び出し側のSizedBoxと同じにフィット
-    final radius = BorderRadius.circular(height / 2);  // カプセル形状
-    final blue = const Color(0xFF2F80ED);
+    final height = size.height * 0.08;
+    final radius = BorderRadius.circular(height / 1.5);
+    final blue = const Color(0xFF94CBFF);
 
     return Material(
       color: Colors.transparent,
@@ -26,10 +26,10 @@ class CapsulePillButton extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             borderRadius: radius,
-            border: Border.all(color: blue.withOpacity(0.35), width: 1),
+            border: Border.all(color: blue, width: 3),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black,
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -38,14 +38,13 @@ class CapsulePillButton extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // 左右で背景色を分割
               Row(
                 children: [
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
                         color: blue,
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(height / 2)),
+                        borderRadius: BorderRadius.horizontal(left: Radius.circular(height / 1.5)),
                       ),
                     ),
                   ),
@@ -53,34 +52,33 @@ class CapsulePillButton extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.horizontal(right: Radius.circular(height / 2)),
+                        borderRadius: BorderRadius.horizontal(right: Radius.circular(height / 1.5)),
                       ),
                     ),
                   ),
                 ],
               ),
-              // テキスト：左半分は白、右半分は青（色反転）
+
               Center(
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
                     return LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
-                      colors: const [
-                        Colors.white, Colors.white,       // 左半分は白
-                        Color(0xFF2F80ED), Color(0xFF2F80ED), // 右半分は青
+                      colors: [
+                        Colors.white, Colors.white,
+                        blue, blue,
                       ],
-                      stops: const [0.0, 0.5, 0.5, 1.0], // 中央で色を切り替え（鋭い境界）
+                      stops: const [0.0, 0.5, 0.5, 1.0],
                     ).createShader(bounds);
                   },
                   blendMode: BlendMode.srcIn,
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: size.width * 0.045,
+                      fontSize: height * 0.36,
                       fontWeight: FontWeight.w700,
                       height: 1.0,
-                      // 色はShaderMaskで上書きされるので何色でもOK
                       color: Colors.white,
                       letterSpacing: 0.5,
                     ),

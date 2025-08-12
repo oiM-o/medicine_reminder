@@ -8,8 +8,6 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> _showRegisterDialog(BuildContext context) async {
     final choice = await registerDialog(context);
-
-    // 選択結果に応じた処理（必要なら後で中身実装）
     if (choice == RegisterChoice.camera) {
       debugPrint("カメラを起動する処理");
     } else if (choice == RegisterChoice.manual) {
@@ -25,7 +23,9 @@ class HomeScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         actions: [
           IconButton(
             icon: SvgPicture.asset(
@@ -43,8 +43,10 @@ class HomeScreen extends StatelessWidget {
             ),
             onPressed: () {},
           ),
+          SizedBox(width: screenWidth * 0.04,)
         ],
       ),
+
       body: Padding(
         padding: EdgeInsets.all(screenWidth * 0.05),
         child: Column(
@@ -53,11 +55,26 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: screenHeight * 0.25,
               child: Card(
-                color: Colors.green.shade100,
-                child: Center(
-                  child: Text(
-                    '現在、すべての薬を服薬済',
-                    style: TextStyle(fontSize: screenWidth * 0.05),
+                color: Color(0xFFA3EAD0),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'すべて服薬済み',
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.08,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.04),
+                      Image.asset(
+                        'assets/images/medicine_red.png',
+                        width: screenWidth * 0.30,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -66,7 +83,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: screenHeight * 0.02),
 
             SizedBox(
-              height: screenHeight * 0.08,
+              height: screenHeight * 0.12,
               child: CapsulePillButton(
                 label: 'おくすり登録',
                 onTap: () {
@@ -77,20 +94,35 @@ class HomeScreen extends StatelessWidget {
 
             SizedBox(height: screenHeight * 0.02),
 
-            Expanded(
-              child: ListView.builder(
-                itemCount: 5, // 仮のデータ件数
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(
-                        '薬 ${index + 1}',
-                        style: TextStyle(fontSize: screenWidth * 0.04),
-                      ),
-                      subtitle: const Text('1日3回'),
+            // 薬リスト部分
+            SizedBox(
+              height: screenHeight * 0.4,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: ListView.separated(
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
+                        title: Text(
+                          '薬 ${index + 1}',
+                          style: TextStyle(fontSize: screenWidth * 0.04),
+                        ),
+                        subtitle: const Text('1日3回'),
+                      );
+                    },
+                    separatorBuilder: (context, index) => Divider(
+                      color: Colors.grey.shade300,
+                      height: 1,
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ],
