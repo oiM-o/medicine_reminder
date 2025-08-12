@@ -14,6 +14,7 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
     barrierDismissible: true,
     builder: (context) {
       return Dialog(
+        backgroundColor: Colors.white,
         insetPadding: EdgeInsets.symmetric(horizontal: width * 0.08),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
@@ -30,18 +31,30 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
               SizedBox(
                 width: double.infinity,
                 height: buttonHeight,
-                child: ElevatedButton.icon(
+                child: OutlinedButton.icon(
                   onPressed: () => Navigator.of(context).pop(RegisterChoice.camera),
-                  icon: const Icon(Icons.photo_camera),
-                  label: const Text('カメラで撮影'),
-                  style: ElevatedButton.styleFrom(
+                  icon: Icon(
+                    Icons.photo_camera,
+                    size: width * 0.05,
+                    color: blue,
+                  ),
+                  label: Text(
+                      'カメラで撮影',
+                    style: TextStyle(
+                      color: blue,
+                      fontSize: width * 0.045,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: blue, width: 2),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     textStyle: TextStyle(
                       fontSize: width * 0.045,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
-                    backgroundColor: blue,
+                    backgroundColor: Colors.white,
                   ),
                 ),
               ),
@@ -51,18 +64,30 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
               SizedBox(
                 width: double.infinity,
                 height: buttonHeight,
-                child: ElevatedButton.icon(
+                child: OutlinedButton.icon(
                   onPressed: () => Navigator.of(context).pop(RegisterChoice.manual),
-                  icon: const Icon(Icons.edit),
-                  label: const Text('手動で入力'),
-                  style: ElevatedButton.styleFrom(
+                  icon: Icon(
+                    Icons.edit,
+                    size: width * 0.05,
+                    color: blue,
+                  ),
+                  label: Text(
+                      '手動で入力',
+                    style: TextStyle(
+                      color: blue,
+                      fontSize: width * 0.045,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: blue, width: 2),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     textStyle: TextStyle(
                         fontSize: width * 0.045,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                     ),
-                    backgroundColor: blue,
+                    backgroundColor: Colors.white,
                   ),
                 ),
               ),
@@ -70,7 +95,14 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
               SizedBox(height: height * 0.01),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('キャンセル'),
+                child: Text(
+                    'キャンセル',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: width * 0.035,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ],
           ),
