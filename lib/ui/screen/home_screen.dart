@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:medicine_reminder/ui/components/capsule_pill_button.dart';
+import 'package:medicine_reminder/ui/dialog/register_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  Future<void> _showRegisterDialog(BuildContext context) async {
+    final choice = await registerDialog(context);
+
+    // 選択結果に応じた処理（必要なら後で中身実装）
+    if (choice == RegisterChoice.camera) {
+      debugPrint("カメラを起動する処理");
+    } else if (choice == RegisterChoice.manual) {
+      debugPrint("手動入力画面へ遷移する処理");
+    } else {
+      debugPrint("キャンセルされた");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +70,7 @@ class HomeScreen extends StatelessWidget {
               child: CapsulePillButton(
                 label: 'おくすり登録',
                 onTap: () {
-                  // TODO: 登録画面へ遷移
+                  _showRegisterDialog(context);
                 },
               ),
             ),
