@@ -27,13 +27,6 @@ class CapsulePillButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: radius,
             border: Border.all(color: blue, width: 3),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
           ),
           child: Stack(
             fit: StackFit.expand,
@@ -44,7 +37,10 @@ class CapsulePillButton extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: blue,
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(height / 1.5)),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(height / 1.6),
+                          bottomLeft: Radius.circular(height / 1.6),
+                        ),
                       ),
                     ),
                   ),

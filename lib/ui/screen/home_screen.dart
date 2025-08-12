@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:medicine_reminder/ui/components/capsule_pill_button.dart';
 import 'package:medicine_reminder/ui/dialog/register_dialog.dart';
+import 'package:medicine_reminder/ui/screen/setting_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,6 +22,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final blue = Color(0xFF94CBFF);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -41,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               width: screenWidth * 0.07,
               height: screenWidth * 0.07,
             ),
-            onPressed: () {},
+            onPressed: () => showSettingsSheet(context),
           ),
           SizedBox(width: screenWidth * 0.04,)
         ],
@@ -94,33 +96,60 @@ class HomeScreen extends StatelessWidget {
 
             SizedBox(height: screenHeight * 0.02),
 
-            // 薬リスト部分
+            //TODO 登録されている薬が0の時と1以上の時で表示切り替え
             SizedBox(
               height: screenHeight * 0.4,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(
+                      color: blue,
+                      width: 2,
+                  ),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: ListView.separated(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
-                        title: Text(
-                          '薬 ${index + 1}',
-                          style: TextStyle(fontSize: screenWidth * 0.04),
+                  borderRadius: BorderRadius.circular(14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        color: blue,
+                        padding: EdgeInsets.symmetric(
+                          vertical: screenHeight * 0.006,
                         ),
-                        subtitle: const Text('1日3回'),
-                      );
-                    },
-                    separatorBuilder: (context, index) => Divider(
-                      color: Colors.grey.shade300,
-                      height: 1,
-                    ),
+                        child: Center(
+                          child: Text(
+                            '登録済みのおくすり',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.04,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    Divider(color: blue, height: 1),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: screenHeight * 0.001),
+                            title: Text(
+                              '薬 ${index + 1}',
+                              style: TextStyle(fontSize: screenWidth * 0.04),
+                            ),
+                            subtitle: const Text('1日3回'),
+                          );
+                        },
+                        separatorBuilder: (context, index) => Divider(
+                          color: Colors.grey.shade300,
+                          height: 1,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
