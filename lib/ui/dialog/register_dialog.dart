@@ -1,4 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../screen/OCR/camera_screen.dart';
 
 enum RegisterChoice { camera, manual }
 
@@ -32,7 +36,35 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
                 width: double.infinity,
                 height: buttonHeight,
                 child: OutlinedButton.icon(
-                  onPressed: () => Navigator.of(context).pop(RegisterChoice.camera),
+                  onPressed: () async {
+                    final nav = Navigator.of(context, rootNavigator: true);
+                    try{
+                      final cameras = await availableCameras();
+                      if (cameras.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "利用可能なカメラを検出できませんでした"
+                        );
+                        return;
+                      }
+
+                      nav.pop();
+
+                      //複数あるカメラのうち、背面カメラを優先して選択
+                      final selectedCamera = cameras.firstWhere(
+                            (c) => c.lensDirection == CameraLensDirection.back,
+                        orElse: () => cameras.first,
+                      );
+
+                      nav.push(
+                        MaterialPageRoute(
+                          builder: (_) => CameraScreen(camera: selectedCamera),
+                        ),
+                      );
+                    } catch (e) {
+                    // TODO: エラーハンドリング（権限・初期化失敗など）
+                    debugPrint('camera open failed: $e');
+                    }
+                  },
                   icon: Icon(
                     Icons.photo_camera,
                     size: width * 0.05,
