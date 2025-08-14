@@ -1,4 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
+import '../screen/OCR/camera_screen.dart';
 
 enum RegisterChoice { camera, manual }
 
@@ -32,7 +35,27 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
                 width: double.infinity,
                 height: buttonHeight,
                 child: OutlinedButton.icon(
-                  onPressed: () => Navigator.of(context).pop(RegisterChoice.camera),
+                  onPressed: () async {
+                    // 先に Navigator を取っておく（root を指定しておくと安全）
+                    final nav = Navigator.of(context, rootNavigator: true);
+
+                    // カメラ一覧を取得して最初の1台を使う
+                    final cameras = await availableCameras();
+                    if (cameras.isEmpty) {
+                      // 必要ならトースト表示など
+                      return;
+                    }
+
+                    // 先にダイアログを閉じる
+                    nav.pop();
+
+                    // 直後に CameraScreen へ遷移（カメラを渡す）
+                    nav.push(
+                      MaterialPageRoute(
+                        builder: (_) => CameraScreen(camera: cameras.first),
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.photo_camera,
                     size: width * 0.05,
