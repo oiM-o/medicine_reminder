@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:medicine_reminder/ui/screen/OCR/result_screen.dart';
+import 'package:medicine_reminder/ui/components/shutter_button.dart';
+
+import '../../components/cover_camera_preview.dart';
 
 class CameraScreen extends StatefulWidget {
   final CameraDescription camera;
@@ -24,6 +27,8 @@ class _CameraScreenState extends State<CameraScreen> {
     _controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.jpeg,
     );
     _initializeControllerFuture = _controller.initialize();
   }
@@ -48,7 +53,6 @@ class _CameraScreenState extends State<CameraScreen> {
       final recognizedText = await textRecognizer.processImage(inputImage);
       await textRecognizer.close();
 
-      // カメラを閉じてから遷移
       await _controller.dispose();
 
       if (!mounted) return;
@@ -67,21 +71,20 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Stack(
+              fit: StackFit.expand,
               children: [
-                CameraPreview(_controller),
+                CoverCameraPreview(controller: _controller),
                 Positioned(
-                  bottom: 40,
-                  left: 0,
-                  right: 0,
+                  left: 0, right: 0, bottom: 36,
                   child: Center(
-                    child: FloatingActionButton(
-                      onPressed: _takePictureAndRecognizeText,
-                      child: const Icon(Icons.camera_alt),
+                    child: ShutterButton(
+                      onTap: _isProcessing ? null : _takePictureAndRecognizeText,
                     ),
                   ),
                 ),
