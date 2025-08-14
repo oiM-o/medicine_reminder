@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
+          fontFamily: 'Noto Sans JP'
       ),
       home: const HomeScreen(), // ← これで起動時にHomeScreenが出る
       // ルーティングを使うならこんな感じで追加してもOK
