@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screen/OCR/camera_screen.dart';
 
@@ -36,25 +37,33 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
                 height: buttonHeight,
                 child: OutlinedButton.icon(
                   onPressed: () async {
-                    // 先に Navigator を取っておく（root を指定しておくと安全）
                     final nav = Navigator.of(context, rootNavigator: true);
+                    try{
+                      final cameras = await availableCameras();
+                      if (cameras.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "利用可能なカメラを検出できませんでした"
+                        );
+                        return;
+                      }
 
-                    // カメラ一覧を取得して最初の1台を使う
-                    final cameras = await availableCameras();
-                    if (cameras.isEmpty) {
-                      // 必要ならトースト表示など
-                      return;
+                      nav.pop();
+
+                      //複数あるカメラのうち、背面カメラを優先して選択
+                      final selectedCamera = cameras.firstWhere(
+                            (c) => c.lensDirection == CameraLensDirection.back,
+                        orElse: () => cameras.first,
+                      );
+
+                      nav.push(
+                        MaterialPageRoute(
+                          builder: (_) => CameraScreen(camera: selectedCamera),
+                        ),
+                      );
+                    } catch (e) {
+                    // TODO: エラーハンドリング（権限・初期化失敗など）
+                    debugPrint('camera open failed: $e');
                     }
-
-                    // 先にダイアログを閉じる
-                    nav.pop();
-
-                    // 直後に CameraScreen へ遷移（カメラを渡す）
-                    nav.push(
-                      MaterialPageRoute(
-                        builder: (_) => CameraScreen(camera: cameras.first),
-                      ),
-                    );
                   },
                   icon: Icon(
                     Icons.photo_camera,
