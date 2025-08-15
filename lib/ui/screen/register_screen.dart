@@ -19,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _timesPerDayController = TextEditingController(); // 1日何回
   final _daysCountController = TextEditingController();   // 何日分（数値）
   final _pillsPerDoseController = TextEditingController(); // 1回何錠
+  final _memoController = TextEditingController();
 
   // 飲むタイミング（複数選択）
   final List<String> _timingOptions = const ['朝', '昼', '夕食後', '就寝前'];
@@ -33,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _timesPerDayController.dispose();
     _daysCountController.dispose();
     _pillsPerDoseController.dispose();
+    _memoController.dispose();
     super.dispose();
   }
 
@@ -81,14 +83,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final days  = int.tryParse(_daysCountController.text.trim()) ?? 0;
     final pills = int.tryParse(_pillsPerDoseController.text.trim()) ?? 0;
     final timings = _selectedTimings.toList();
+    final memo = _memoController.text.trim();
 
-    // いまのDBスキーマ（name, dose, memo）に合わせて保存文字列を整形
+
     final doseStr = '1日${times}回｜タイミング:${timings.isEmpty ? "未選択" : timings.join("・")}｜'
         '${days}日分｜1回${pills}錠';
 
     try {
       final id = await AppDatabase.instance.insertMedicine(
-        Medicine(name: name, dose: doseStr, memo: ''), // ★memoはひとまず空
+        Medicine(name: name, dose: doseStr, memo: memo),
       );
 
       Fluttertoast.showToast(
@@ -132,6 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final size  = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
+    final blue = Color(0xFF94CBFF);
 
     InputDecoration _dec(String label, {Widget? suffix}) => InputDecoration(
       filled: true,
@@ -147,7 +151,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new),
+        icon: Icon(
+          Icons.arrow_back_ios_new,
+          color: blue,
+        ),
         onPressed: () => Navigator.of(context).pop(),)
       ),
       body: Padding(
@@ -158,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               // 薬名
               Text(
-                  'おくすりの名前',
+                  '薬の名前',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: Colors.black87,
@@ -172,38 +179,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               SizedBox(height: height * 0.05),
 
-              // 1日何回（「1日 [ ] 回」）
-              Text(
-                  '1日何回',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black87,
-                  )),
-              SizedBox(height: height * 0.008),
-              Row(
-                children: [
-                  const Text('1日'),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: 88,
-                    child: TextFormField(
-                      controller: _timesPerDayController,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      decoration: _dec('回数'),
-                      validator: (v) => _validateInt(v, label: '回数', min: 1, max: 12),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text('回'),
-                ],
-              ),
-
-              SizedBox(height: height * 0.05),
-
               // 飲むタイミング（複数選択の丸み四角ボタン）
               Text(
-                  '飲むタイミング（複数選択可）',
+                  '服用タイミング（複数選択可）',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: Colors.black87,
@@ -244,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               // 何日分（数値 or 期間で選ぶ）
               Text(
-                  '何日分 / 期間',
+                  '日数（期間）',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: Colors.black87,
@@ -286,7 +264,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               // 1回あたり何錠（「1回 [ ] 錠」）
               Text(
-                  '1回あたり何錠',
+                  '1回あたりの錠数',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: Colors.black87,
@@ -313,10 +291,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               SizedBox(height: height * 0.05),
 
+              Text(
+                'メモ（任意）',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black87,
+                ),
+              ),
+              SizedBox(height: height * 0.008),
+              TextFormField(
+                controller: _memoController,
+                decoration: _dec('例：食後に服用、他薬と併用注意など'),
+                minLines: 3,
+                maxLines: 4,
+                textAlignVertical: TextAlignVertical.top,
+                maxLength: 200,
+              ),
+
+              SizedBox(height: height * 0.05),
+
               // 保存ボタン
               SizedBox(
                 height: height * 0.06,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: blue,
+                  ),
                   onPressed: () {
                     // タイミング未選択時は軽いガード（必須にしたくなければ外してOK）
                     if (_selectedTimings.isEmpty) {
@@ -328,7 +328,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                     _saveMedicine();
                   },
-                  child: const Text('登録する'),
+                  child: Text(
+                    '登録する',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      )
+                  ),
                 ),
               ),
             ],
