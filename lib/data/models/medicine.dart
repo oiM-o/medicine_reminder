@@ -3,7 +3,7 @@ import 'dart:convert';
 class Medicine {
   final int? id;                 // 自動採番
   final String name;             // 薬名（必須）
-  final List<String> timings;    // 服用タイミング（例：['朝','昼','就寝前']）
+  final List<String> timings;    // 服用タイミング（例：['朝','昼','夕食後','就寝前']）
   final int pillsPerDose;        // 1回の錠数
   final int daysCount;           // 何日分（期間選択時は合算日数）
   final DateTime? startDate;     // 期間開始（任意）
