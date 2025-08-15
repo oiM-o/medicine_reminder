@@ -79,20 +79,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final name  = _nameController.text.trim();
-    final times = int.tryParse(_timesPerDayController.text.trim()) ?? 0;
     final days  = int.tryParse(_daysCountController.text.trim()) ?? 0;
     final pills = int.tryParse(_pillsPerDoseController.text.trim()) ?? 0;
     final timings = _selectedTimings.toList();
     final memo = _memoController.text.trim();
 
 
-    final doseStr = '1日${times}回｜タイミング:${timings.isEmpty ? "未選択" : timings.join("・")}｜'
-        '${days}日分｜1回${pills}錠';
+    final med = Medicine(
+      name: name,
+      timings: timings,
+      pillsPerDose: pills,
+      daysCount: days,
+      startDate: _range?.start,
+      endDate: _range?.end,
+      memo: memo,
+    );
 
     try {
-      final id = await AppDatabase.instance.insertMedicine(
-        Medicine(name: name, dose: doseStr, memo: memo),
-      );
+      final id = await AppDatabase.instance.insertMedicine(med);
 
       Fluttertoast.showToast(
         msg: '保存しました（ID: $id）',
