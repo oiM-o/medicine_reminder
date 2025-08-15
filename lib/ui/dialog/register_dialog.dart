@@ -99,7 +99,7 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
                 height: buttonHeight,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop(); // ダイアログを閉じる
+                    Navigator.of(context, rootNavigator: true).pop();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const RegisterScreen()),
