@@ -4,8 +4,30 @@ import 'package:medicine_reminder/ui/components/capsule_pill_button.dart';
 import 'package:medicine_reminder/ui/dialog/register_dialog.dart';
 import 'package:medicine_reminder/ui/screen/setting_sheet.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../../data/app_database.dart';
+import '../../data/models/medicine.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Medicine>> _futureMeds;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureMeds = AppDatabase.instance.getAllMedicines();
+  }
+
+  Future<void> _reload() async {
+    setState(() {
+      _futureMeds = AppDatabase.instance.getAllMedicines();
+    });
+  }
 
   Future<void> _showRegisterDialog(BuildContext context) async {
     final choice = await registerDialog(context);
@@ -16,6 +38,10 @@ class HomeScreen extends StatelessWidget {
     } else {
       debugPrint("キャンセルされた");
     }
+  }
+
+  String _formatYmd(DateTime dt) {
+    return '${dt.year}/${dt.month.toString().padLeft(2, '0')}/${dt.day.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -96,7 +122,6 @@ class HomeScreen extends StatelessWidget {
 
             SizedBox(height: screenHeight * 0.02),
 
-            //TODO 登録されている薬が0の時と1以上の時で表示切り替え
             SizedBox(
               height: screenHeight * 0.4,
               child: Container(
@@ -131,23 +156,71 @@ class HomeScreen extends StatelessWidget {
                       ),
                     Divider(color: blue, height: 1),
                     Expanded(
-                      child: ListView.separated(
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: screenHeight * 0.001),
-                            title: Text(
-                              '薬 ${index + 1}',
-                              style: TextStyle(fontSize: screenWidth * 0.04),
+                      child: FutureBuilder<List<Medicine>>(
+                        future: _futureMeds,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text('読み込みに失敗しました: ${snapshot.error}'),
+                            );
+                          }
+                          final meds = snapshot.data ?? [];
+                          if (meds.isEmpty) {
+                            return Center(
+                              child: Text(
+                                '登録されたおくすりはありません',
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.04,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            );
+                          }
+
+                          return RefreshIndicator(
+                            onRefresh: _reload,
+                            child: ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: meds.length,
+                              itemBuilder: (context, index) {
+                                final m = meds[index];
+                                return ListTile(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.04,
+                                    vertical: screenHeight * 0.001,
+                                  ),
+                                  title: Text(
+                                    m.name,
+                                    style: TextStyle(fontSize: screenWidth * 0.042),
+                                  ),
+                                  // humanReadableDose を使うと見やすい
+                                  subtitle: Text(
+                                    m.humanReadableDose,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  // 例：右端に作成日など
+                                  trailing: Text(
+                                    _formatYmd(m.createdAt),
+                                    style: TextStyle(fontSize: screenWidth * 0.032),
+                                  ),
+                                  onTap: () {
+                                    // TODO: 詳細表示/編集へ遷移したい場合ここに実装
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) => Divider(
+                                color: Colors.grey.shade300,
+                                height: 1,
+                              ),
                             ),
-                            subtitle: const Text('1日3回'),
                           );
                         },
-                        separatorBuilder: (context, index) => Divider(
-                          color: Colors.grey.shade300,
-                          height: 1,
-                          ),
-                        ),
+                      ),
+
                       ),
                     ],
                   ),
@@ -160,3 +233,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+
