@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screen/OCR/camera_screen.dart';
+import '../screen/register_screen.dart';
 
 enum RegisterChoice { camera, manual }
 
@@ -97,7 +98,13 @@ Future<RegisterChoice?> registerDialog(BuildContext context) {
                 width: double.infinity,
                 height: buttonHeight,
                 child: OutlinedButton.icon(
-                  onPressed: () => Navigator.of(context).pop(RegisterChoice.manual),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(); // ダイアログを閉じる
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                    );
+                  },
                   icon: Icon(
                     Icons.edit,
                     size: width * 0.05,
