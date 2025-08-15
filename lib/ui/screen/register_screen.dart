@@ -15,7 +15,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
-  final _timesPerDayController = TextEditingController();
   final _daysCountController = TextEditingController();
   final _pillsPerDoseController = TextEditingController();
   final _memoController = TextEditingController();
@@ -28,7 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _timesPerDayController.dispose();
     _daysCountController.dispose();
     _pillsPerDoseController.dispose();
     _memoController.dispose();
