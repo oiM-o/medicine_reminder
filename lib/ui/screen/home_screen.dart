@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:medicine_reminder/ui/components/capsule_pill_button.dart';
 import 'package:medicine_reminder/ui/dialog/register_dialog.dart';
+import 'package:medicine_reminder/ui/screen/register_screen.dart';
 import 'package:medicine_reminder/ui/screen/setting_sheet.dart';
 
 import '../../data/app_database.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _futureMeds = AppDatabase.instance.getAllMedicines();
   }
 
+  //TODO: 登録直後に必ず画面リロードが走るようにしたい
   Future<void> _reload() async {
     setState(() {
       _futureMeds = AppDatabase.instance.getAllMedicines();
@@ -34,7 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (choice == RegisterChoice.camera) {
       debugPrint("カメラを起動する処理");
     } else if (choice == RegisterChoice.manual) {
-      debugPrint("手動入力画面へ遷移する処理");
+      final saved = await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(builder: (_) => const RegisterScreen()),
+      );
+      if (saved == true) {
+        await Future.delayed(Duration(milliseconds: 700));
+        _reload();
+      }
     } else {
       debugPrint("キャンセルされた");
     }
