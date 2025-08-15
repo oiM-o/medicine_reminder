@@ -6,8 +6,8 @@ class AppDatabase {
   AppDatabase._();
   static final AppDatabase instance = AppDatabase._();
 
-  static const _dbName = 'medicine.db'; // 変えてもOK（例: medicine_v2.db）
-  static const _dbVersion = 2;          // ★ バージョンを上げる
+  static const _dbName = 'medicine.db';
+  static const _dbVersion = 2;
 
   static const tableMedicine = 'medicines';
 
@@ -21,7 +21,7 @@ class AppDatabase {
       path,
       version: _dbVersion,
       onCreate: _onCreate,
-      onUpgrade: _onUpgradeDropAndRecreate, // ★ ここで全部作り直す
+      onUpgrade: _onUpgradeDropAndRecreate,
     );
     return _db!;
   }
