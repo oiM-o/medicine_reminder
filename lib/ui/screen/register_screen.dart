@@ -14,19 +14,16 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // 入力コントローラ
   final _nameController = TextEditingController();
-  final _timesPerDayController = TextEditingController(); // 1日何回
-  final _daysCountController = TextEditingController();   // 何日分（数値）
-  final _pillsPerDoseController = TextEditingController(); // 1回何錠
+  final _timesPerDayController = TextEditingController();
+  final _daysCountController = TextEditingController();
+  final _pillsPerDoseController = TextEditingController();
   final _memoController = TextEditingController();
 
-  // 飲むタイミング（複数選択）
   final List<String> _timingOptions = const ['朝', '昼', '夕食後', '就寝前'];
   final Set<String> _selectedTimings = {};
 
-  // 期間選択（任意）
-  DateTimeRange? _range; // 期間を選ぶとここに入り、_daysCount に反映
+  DateTimeRange? _range;
 
   @override
   void dispose() {
@@ -54,7 +51,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
       helpText: '服用期間を選択',
       builder: (context, child) {
-        // 丸みなどの見た目を少し整える
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -70,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _range = picked;
         final days = picked.end.difference(picked.start).inDays + 1;
-        _daysCountController.text = days.toString(); // 数値欄に反映
+        _daysCountController.text = days.toString();
       });
     }
   }
@@ -167,7 +163,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              // 薬名
               Text(
                   '薬の名前',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -177,13 +172,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SizedBox(height: height * 0.008),
               TextFormField(
                 controller: _nameController,
-                decoration: _dec('薬名'),
-                validator: (v) => _validateRequired(v, label: '薬名'),
+                decoration: _dec('薬の名前'),
+                validator: (v) => _validateRequired(v, label: '薬の名前'),
               ),
 
               SizedBox(height: height * 0.05),
 
-              // 飲むタイミング（複数選択の丸み四角ボタン）
               Text(
                   '服用タイミング（複数選択可）',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -224,7 +218,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               SizedBox(height: height * 0.05),
 
-              // 何日分（数値 or 期間で選ぶ）
               Text(
                   '日数（期間）',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -266,7 +259,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               SizedBox(height: height * 0.05),
 
-              // 1回あたり何錠（「1回 [ ] 錠」）
               Text(
                   '1回あたりの錠数',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -314,7 +306,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               SizedBox(height: height * 0.05),
 
-              // 保存ボタン
               SizedBox(
                 height: height * 0.06,
                 child: ElevatedButton(
@@ -322,7 +313,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     backgroundColor: blue,
                   ),
                   onPressed: () {
-                    // タイミング未選択時は軽いガード（必須にしたくなければ外してOK）
                     if (_selectedTimings.isEmpty) {
                       Fluttertoast.showToast(
                         msg: '飲むタイミングを1つ以上選択してください',
