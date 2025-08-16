@@ -4,9 +4,10 @@ import 'package:medicine_reminder/ui/components/capsule_pill_button.dart';
 import 'package:medicine_reminder/ui/dialog/register_dialog.dart';
 import 'package:medicine_reminder/ui/screen/register_screen.dart';
 import 'package:medicine_reminder/ui/screen/setting_sheet.dart';
-
 import '../../data/app_database.dart';
 import '../../data/models/medicine.dart';
+import 'medicine_detail_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -217,7 +218,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(fontSize: screenWidth * 0.032),
                                   ),
                                   onTap: () {
-                                    // TODO: 詳細表示/編集へ遷移したい場合ここに実装
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => MedicineDetailScreen(medicine: m),
+                                      ),
+                                    );
                                   },
                                 );
                               },
