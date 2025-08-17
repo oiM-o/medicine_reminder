@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../../data/app_database.dart';
 import '../../data/models/medicine.dart';
-
+import '../dialog/delete_dialog.dart';
 
 class MedicineDetailScreen extends StatelessWidget {
   const MedicineDetailScreen({super.key, required this.medicine});
@@ -10,6 +12,20 @@ class MedicineDetailScreen extends StatelessWidget {
 
   String _ymd(DateTime d) =>
       '${d.year}/${d.month.toString().padLeft(2, '0')}/${d.day.toString().padLeft(2, '0')}';
+
+  Future<void> _showDeleteDialog(BuildContext context) async {
+    final ok = await showDeleteDialog(
+      context,
+      name: medicine.name,
+    );
+    if (ok == true) {
+      if (medicine.id != null) {
+        await AppDatabase.instance.deleteMedicine(medicine.id!);
+        Fluttertoast.showToast(msg: '削除しました');
+      }
+      Navigator.of(context).pop(true); // 呼び出し元(Home等)へ「削除済み」を返す
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +108,45 @@ class MedicineDetailScreen extends StatelessWidget {
             '登録日：${_ymd(medicine.createdAt)}',
             style: TextStyle(color: Colors.grey.shade600),
             textAlign: TextAlign.right,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    onPressed: () {
+                      _showDeleteDialog(context);
+                    },
+                    child: const Text(
+                      "削除",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _blue,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    onPressed: () {
+                      // TODO: 編集画面へ遷移処理
+                    },
+                    child: const Text(
+                      "編集",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
