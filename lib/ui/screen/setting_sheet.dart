@@ -82,21 +82,28 @@ class _SettingsSheet extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.color_lens),
-                title: const Text('テーマ変更'),
+                leading: const Icon(Icons.question_mark),
+                title: const Text('アプリの使い方'),
                 onTap: () {
-                  // TODO: テーマ選択ダイアログへ
+                  // TODO: チュートリアル画面へ
                 },
               ),
+              // ListTile(
+              //   leading: const Icon(Icons.color_lens),
+              //   title: const Text('テーマ変更'),
+              //   onTap: () {
+              //     // TODO: テーマ選択ダイアログへ
+              //   },
+              // ),
               ListTile(
-                leading: const Icon(Icons.info_outline),
+                leading: const Icon(Icons.description),
                 title: const Text('プライバシーポリシー'),
                 onTap: () {
                   // TODO: プライバシーポリシー画面へ
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.info_outline),
+                leading: const Icon(Icons.description),
                 title: const Text('利用規約'),
                 onTap: () {
                   // TODO: 利用規約画面へ
