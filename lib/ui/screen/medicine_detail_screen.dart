@@ -131,22 +131,22 @@ class MedicineDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.black87, width: 1.5),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () {
-                      // TODO: 編集画面へ遷移処理
-                    },
-                    child: const Text(
-                      "編集",
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: OutlinedButton(
+                //     style: OutlinedButton.styleFrom(
+                //       backgroundColor: Colors.white,
+                //       side: const BorderSide(color: Colors.black87, width: 1.5),
+                //       padding: const EdgeInsets.symmetric(vertical: 14),
+                //     ),
+                //     onPressed: () {
+                //       // TODO: 編集画面へ遷移処理
+                //     },
+                //     child: const Text(
+                //       "編集",
+                //       style: TextStyle(color: Colors.black, fontSize: 16),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

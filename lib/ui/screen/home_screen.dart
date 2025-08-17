@@ -65,14 +65,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/icons/home_question.svg',
-              width: screenWidth * 0.07,
-              height: screenWidth * 0.07,
-            ),
-            onPressed: () {},
-          ),
+          //TODO: チュートリアル機能
+          // IconButton(
+          //   icon: SvgPicture.asset(
+          //     'assets/icons/home_question.svg',
+          //     width: screenWidth * 0.07,
+          //     height: screenWidth * 0.07,
+          //   ),
+          //   onPressed: () {},
+          // ),
           IconButton(
             icon: SvgPicture.asset(
               'assets/icons/home_settings.svg',
