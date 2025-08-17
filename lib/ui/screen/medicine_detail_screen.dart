@@ -115,9 +115,10 @@ class MedicineDetailScreen extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.redAccent, width: 1.5),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
@@ -125,15 +126,16 @@ class MedicineDetailScreen extends StatelessWidget {
                     },
                     child: const Text(
                       "削除",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(color: Colors.red, fontSize: 16),
                     ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _blue,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.black87, width: 1.5),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
                     onPressed: () {
@@ -141,7 +143,7 @@ class MedicineDetailScreen extends StatelessWidget {
                     },
                     child: const Text(
                       "編集",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                   ),
                 ),
