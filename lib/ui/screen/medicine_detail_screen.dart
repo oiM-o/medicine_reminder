@@ -23,7 +23,7 @@ class MedicineDetailScreen extends StatelessWidget {
         await AppDatabase.instance.deleteMedicine(medicine.id!);
         Fluttertoast.showToast(msg: '削除しました');
       }
-      Navigator.of(context).pop(true); // 呼び出し元(Home等)へ「削除済み」を返す
+      Navigator.of(context).pop(true);
     }
   }
 

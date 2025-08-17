@@ -85,7 +85,7 @@ class _SettingsSheet extends StatelessWidget {
                 leading: const Icon(Icons.question_mark),
                 title: const Text('アプリの使い方'),
                 onTap: () {
-                  // TODO: 利用規約画面へ
+                  // TODO: チュートリアル画面へ
                 },
               ),
               // ListTile(
